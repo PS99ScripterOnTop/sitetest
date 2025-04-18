@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Your Key</title>
+</head>
+<body>
+    <h1>🎯 Your Key</h1>
+    <p id="key"></p>
+    <button onclick="copyKey()">Copy Key</button>
+
+<script>
+async function generateKey() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let key = '';
+    for (let i = 0; i < 16; i++) {
+        key += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return key;
+}
+
+async function uploadKey(newKey) {
+    await fetch('https://your-replit-username.repl.co/upload-key', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ newKey })
+    });
+}
+
+async function start() {
+    const key = await generateKey();
+    document.getElementById('key').textContent = key;
+    await uploadKey(key);
+}
+
+function copyKey() {
+    const keyText = document.getElementById('key').textContent;
+    navigator.clipboard.writeText(keyText).then(() => {
+        alert('✅ Key copied!');
+    });
+}
+
+start();
+</script>
+
+</body>
+</html>
